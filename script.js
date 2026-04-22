@@ -15,3 +15,9 @@ function startQuiz() {
     fetchQuestions();
 }
 
+async function fetchQuestions() {
+    const response = await fetch(`https://opentdb.com/api.php?amount=10&category=18&type=multiple&difficulty=${difficulty}`);
+    const data = await response.json();
+    questions = data.results;
+    showQuestion();
+}
