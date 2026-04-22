@@ -27,3 +27,9 @@ function decodeHTML(html) {
     txt.innerHTML = html;
     return txt.value;
 }
+
+function showQuestion() {
+    resetState();
+    let q = questions[currentQuestion];
+
+    questionEl.innerText = decodeHTML(q.question);
