@@ -33,3 +33,15 @@ function showQuestion() {
     let q = questions[currentQuestion];
 
     questionEl.innerText = decodeHTML(q.question);
+
+    let answers = [...q.incorrect_answers];
+    answers.push(q.correct_answer);
+    answers.sort(() => Math.random() - 0.5);
+
+    answers.forEach(answer => {
+        const btn = document.createElement("button");
+        btn.innerText = decodeHTML(answer);
+        btn.onclick = () => selectAnswer(answer, q.correct_answer);
+        answersEl.appendChild(btn);
+    });
+}    
