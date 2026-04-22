@@ -45,3 +45,8 @@ function showQuestion() {
         answersEl.appendChild(btn);
     });
 }    
+
+function resetState() {
+    nextBtn.style.display = "none";
+    answersEl.innerHTML = "";
+}
