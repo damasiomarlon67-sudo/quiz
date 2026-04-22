@@ -50,3 +50,18 @@ function resetState() {
     nextBtn.style.display = "none";
     answersEl.innerHTML = "";
 }
+
+function selectAnswer(selected, correct) {
+    if (selected === correct) score++;
+
+    Array.from(answersEl.children).forEach(button => {
+        button.disabled = true;
+        if (button.innerText === decodeHTML(correct)) {
+            button.style.backgroundColor = "green";
+        } else {
+            button.style.backgroundColor = "red";
+        }
+    });
+
+    nextBtn.style.display = "block";
+}
