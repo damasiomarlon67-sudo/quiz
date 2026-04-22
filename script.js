@@ -7,3 +7,11 @@ let questions = [];
 let currentQuestion = 0;
 let score = 0;
 let difficulty = "easy";
+
+function startQuiz() {
+    difficulty = document.getElementById("difficulty").value;
+    document.getElementById("start-screen").style.display = "none";
+    questionEl.style.display = "block";
+    fetchQuestions();
+}
+
