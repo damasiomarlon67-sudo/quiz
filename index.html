@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Informatica</title>
+     <style>
+        body {
+            font-family: Times New Roman;
+            text-align: center;
+            background: #f4f4f4;
+        }
+        #quiz-container {
+            background: white;
+            padding: 20px;
+            margin: 50px auto;
+            width: 50%;
+            border-radius: 10px;
+        }
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 60%;
+            cursor: pointer;
+        }
+        select {
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>  
+</head>
+<body>
+    <div id="quiz-container">
+    <h2>Quiz de Informática</h2>
+
+    <div id="start-screen">
+        <p>Escolha a dificuldade:</p>
+        <select id="difficulty">
+            <option value="easy">Fácil</option>
+            <option value="medium">Médio</option>
+            <option value="hard">Difícil</option>
+        </select>
+        <button onclick="startQuiz()">Começar</button>
+    </div>
+
+    <h3 id="question" style="display:none;"></h3>
+    <div id="answers"></div>
+    <button id="next-btn" style="display:none;">Próxima</button>
+    <h3 id="score"></h3>
+</div>
+</body>
+</html>
