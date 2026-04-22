@@ -65,3 +65,12 @@ function selectAnswer(selected, correct) {
 
     nextBtn.style.display = "block";
 }
+
+nextBtn.onclick = () => {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+        showQuestion();
+    } else {
+        showScore();
+    }
+};
