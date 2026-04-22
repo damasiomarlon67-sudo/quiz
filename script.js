@@ -74,3 +74,12 @@ nextBtn.onclick = () => {
         showScore();
     }
 };
+
+function showScore() {
+    resetState();
+    questionEl.innerText = "Quiz finalizado!";
+    scoreEl.innerText = `Dificuldade: ${difficulty.toUpperCase()} | Acertos: ${score}/${questions.length}`;
+    nextBtn.innerText = "Reiniciar";
+    nextBtn.style.display = "block";
+    nextBtn.onclick = () => location.reload();
+}
