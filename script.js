@@ -1,3 +1,20 @@
+
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const nextBtn = document.getElementById("next-btn");
+const scoreEl = document.getElementById("score");
+
+let questions = [];
+let currentQuestion = 0;
+let score = 0;
+let difficulty = "easy";
+
+function decodeHTML(html) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+
 async function translateText(text) {
     try {
         const response = await fetch("https://libretranslate.de/translate", {
@@ -15,21 +32,12 @@ async function translateText(text) {
 
         const data = await response.json();
         return data.translatedText;
+
     } catch (error) {
         console.error("Erro na tradução:", error);
-        return text; // fallback (se falhar, mostra original)
+        return text; // fallback (caso falhe)
     }
 }
-
-const questionEl = document.getElementById("question");
-const answersEl = document.getElementById("answers");
-const nextBtn = document.getElementById("next-btn");
-const scoreEl = document.getElementById("score");
-
-let questions = [];
-let currentQuestion = 0;
-let score = 0;
-let difficulty = "easy";
 
 function startQuiz() {
     difficulty = document.getElementById("difficulty").value;
@@ -39,41 +47,41 @@ function startQuiz() {
 }
 
 async function fetchQuestions() {
-    const response = await fetch(`https://opentdb.com/api.php?amount=10&category=18&type=multiple&difficulty=${difficulty}`);
+    questionEl.innerText = "Carregando e traduzindo perguntas...";
+    
+    const response = await fetch(
+        `https://opentdb.com/api.php?amount=10&category=18&type=multiple&difficulty=${difficulty}`
+    );
     const data = await response.json();
 
-    // Traduzir todas as perguntas
-    questions = await Promise.all(data.results.map(async (q) => {
+    questions = await Promise.all(
+        data.results.map(async (q) => {
 
-        const translatedQuestion = await translateText(decodeHTML(q.question));
+            const translatedQuestion = await translateText(decodeHTML(q.question));
+            const translatedCorrect = await translateText(decodeHTML(q.correct_answer));
 
-        const translatedCorrect = await translateText(decodeHTML(q.correct_answer));
+            const translatedIncorrect = await Promise.all(
+                q.incorrect_answers.map(ans =>
+                    translateText(decodeHTML(ans))
+                )
+            );
 
-        const translatedIncorrect = await Promise.all(
-            q.incorrect_answers.map(ans => translateText(decodeHTML(ans)))
-        );
-
-        return {
-            question: translatedQuestion,
-            correct_answer: translatedCorrect,
-            incorrect_answers: translatedIncorrect
-        };
-    }));
+            return {
+                question: translatedQuestion,
+                correct_answer: translatedCorrect,
+                incorrect_answers: translatedIncorrect
+            };
+        })
+    );
 
     showQuestion();
-}
-
-function decodeHTML(html) {
-    const txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
 }
 
 function showQuestion() {
     resetState();
     let q = questions[currentQuestion];
 
-    questionEl.innerText = q.question;
+    questionEl.innerText = decodeHTML(q.question);
 
     let answers = [...q.incorrect_answers];
     answers.push(q.correct_answer);
@@ -81,7 +89,7 @@ function showQuestion() {
 
     answers.forEach(answer => {
         const btn = document.createElement("button");
-        btn.innerText = answer;
+        btn.innerText = decodeHTML(answer);
         btn.onclick = () => selectAnswer(answer, q.correct_answer);
         answersEl.appendChild(btn);
     });
