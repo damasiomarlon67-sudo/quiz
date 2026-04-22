@@ -1,3 +1,26 @@
+async function translateText(text) {
+    try {
+        const response = await fetch("https://libretranslate.de/translate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                q: text,
+                source: "en",
+                target: "pt",
+                format: "text"
+            })
+        });
+
+        const data = await response.json();
+        return data.translatedText;
+    } catch (error) {
+        console.error("Erro na tradução:", error);
+        return text; // fallback (se falhar, mostra original)
+    }
+}
+
 const questionEl = document.getElementById("question");
 const answersEl = document.getElementById("answers");
 const nextBtn = document.getElementById("next-btn");
@@ -18,7 +41,25 @@ function startQuiz() {
 async function fetchQuestions() {
     const response = await fetch(`https://opentdb.com/api.php?amount=10&category=18&type=multiple&difficulty=${difficulty}`);
     const data = await response.json();
-    questions = data.results;
+
+    // Traduzir todas as perguntas
+    questions = await Promise.all(data.results.map(async (q) => {
+
+        const translatedQuestion = await translateText(decodeHTML(q.question));
+
+        const translatedCorrect = await translateText(decodeHTML(q.correct_answer));
+
+        const translatedIncorrect = await Promise.all(
+            q.incorrect_answers.map(ans => translateText(decodeHTML(ans)))
+        );
+
+        return {
+            question: translatedQuestion,
+            correct_answer: translatedCorrect,
+            incorrect_answers: translatedIncorrect
+        };
+    }));
+
     showQuestion();
 }
 
@@ -32,7 +73,7 @@ function showQuestion() {
     resetState();
     let q = questions[currentQuestion];
 
-    questionEl.innerText = decodeHTML(q.question);
+    questionEl.innerText = q.question;
 
     let answers = [...q.incorrect_answers];
     answers.push(q.correct_answer);
@@ -40,7 +81,7 @@ function showQuestion() {
 
     answers.forEach(answer => {
         const btn = document.createElement("button");
-        btn.innerText = decodeHTML(answer);
+        btn.innerText = answer;
         btn.onclick = () => selectAnswer(answer, q.correct_answer);
         answersEl.appendChild(btn);
     });
