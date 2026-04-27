@@ -8,6 +8,7 @@ let questions = [];
 let currentQuestion = 0;
 let score = 0;
 let difficulty = "easy";
+let amount = 10;
 
 function decodeHTML(html) {
     const txt = document.createElement("textarea");
@@ -32,8 +33,11 @@ const fetchTradutor = async (texto) => {
 
 function startQuiz() {
     difficulty = document.getElementById("difficulty").value;
+    amount = document.getElementById("amount").value;
+
     document.getElementById("start-screen").style.display = "none";
     questionEl.style.display = "block";
+
     fetchQuestions();
 }
 
@@ -41,8 +45,8 @@ async function fetchQuestions() {
     questionEl.innerText = "Carregando perguntas...";
 
     const response = await fetch(
-        `https://opentdb.com/api.php?amount=10&category=18&type=multiple&difficulty=${difficulty}`
-    );
+    `https://opentdb.com/api.php?amount=${amount}&category=18&type=multiple&difficulty=${difficulty}`
+);
 
     const data = await response.json();
 
