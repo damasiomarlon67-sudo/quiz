@@ -5,30 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz de Informatica</title>
      <style>
-        body {
-            font-family: Times New Roman;
-            text-align: center;
-            background: #f4f4f4;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #quiz-container {
+        background: white;
+        padding: 30px;
+        width: 90%;
+        max-width: 600px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        text-align: center;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    h2 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    h3 {
+        margin-bottom: 15px;
+        color: #444;
+    }
+
+    #question {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 10px;
+        background: #667eea;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #5a67d8;
+        transform: scale(1.02);
+    }
+
+    button:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    #next-btn {
+        background: #48bb78;
+    }
+
+    #next-btn:hover {
+        background: #38a169;
+    }
+
+    select {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+
+    #score {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
         }
-        #quiz-container {
-            background: white;
-            padding: 20px;
-            margin: 50px auto;
-            width: 50%;
-            border-radius: 10px;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-        button {
-            display: block;
-            margin: 10px auto;
-            padding: 10px;
-            width: 60%;
-            cursor: pointer;
-        }
-        select {
-            padding: 10px;
-            margin: 10px;
-        }
-    </style>  
+    }
+</style>
 </head>
 <body>
     <div id="quiz-container">
@@ -41,9 +116,15 @@
             <option value="medium">Médio</option>
             <option value="hard">Difícil</option>
         </select>
+        <p>Quantidade de perguntas:</p>
+<select id="amount">
+    <option value="5">5 perguntas</option>
+    <option value="10" selected>10 perguntas</option>
+    <option value="15">15 perguntas</option>
+    <option value="20">20 perguntas</option>
+</select>
         <button onclick="startQuiz()">Começar</button>
     </div>
-
     <h3 id="question" style="display:none;"></h3>
     <div id="answers"></div>
     <button id="next-btn" style="display:none;">Próxima</button>
